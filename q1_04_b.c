@@ -89,26 +89,3 @@ int main(){
 	}
 	return 0;
 }
-
-
-/*
-int main(){
-	int x;
-	FILE *arq;
-	arq = fopen(“numeros.txt”,”rt”);
-	if (arq == NULL) {
-		printf(“Não foi possível abrir o arquivo.\n”);
-		return EXIT_FAILURE;
-	}
-	printf("Digite um número inteiro de 1 até 999: \n");
-	scanf("%d", &x);
-	while(x > 999 || x < 1){
-		printf("Digite um número inteiro de 1 até 999: \n");
-		scanf("%d", &x);
-	}
-	extenso(x);
-}
-
-
-*/
-
