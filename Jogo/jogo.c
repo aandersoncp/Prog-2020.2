@@ -32,6 +32,18 @@ int validar_nome(char *nome){
 	return 1;
 }
 
+int validar_jogada(char *jogada, char letra){
+	while(str_tamanho(jogada) > 30){
+		printf("(ATENÇÃO) Digite uma jogada com até 30 caracteres: \n");
+		scanf("%s", jogada);
+	}
+	while((int) jogada[0] != (int) letra && (int) jogada[0] != ((int) letra) + 32){
+		printf("(ATENÇÃO) Digite uma jogada que comece com a letra %c: \n", letra);
+		scanf("%s", jogada);
+	}
+	return 1;
+}
+
 void inserir_jogador(Jogador *participantes, char *nome, int i){
 	strcpy(participantes[i].nome, nome);
 }
@@ -74,6 +86,17 @@ void ordem_rodada(int *ordem, int n){
 	}
 	//printf("\n");
 }
+
+/*void calcular_pontos(Jogador *participantes, int n){
+	char jogada_rodada[30];
+	for(int i = 0; i < n; i++){
+		for(int j = i + 1; j < n; j++){
+			if(str_tamanho(participantes[i].jogada) == str_tamanho(participantes[j].jogada)){
+
+			}
+		}
+	}
+}*/
 
 int main(){
 	int numero_jogadores;
@@ -124,6 +147,7 @@ int main(){
 		for(int k = 0; k < numero_jogadores; k++){
 			printf("Jogador %d: %s, digite sua resposta:\n", ordem[k], participantes[ordem[k]].nome);
 			scanf("%s", jogada_rodada);
+			validar_jogada(jogada_rodada, letras[letra_rodada]);
 			inserir_jogada(participantes, jogada_rodada, ordem[k]);
 		}
 	}
