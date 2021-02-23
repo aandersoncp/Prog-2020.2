@@ -65,17 +65,19 @@ void ordem_rodada(int *ordem, int n){
 			num = rand()%(n);
 		}
 		ordem[i] = num;
-		printf("%d", num);
+		//printf("%d", num);
 		i++;
 	}
 	printf("\n");
 }
 
+void rodada()
+
 int main(){
 	int numero_jogadores;
 	char nome_participante[50];
 	char letras[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	//char *categorias[];
+	char *categorias[] = {"COMIDA", "ANIMAIS", "PESSOAS", "CIDADES", "PROFISSÕES"};
 	int letra_rodada, categoria_rodada;
 	srand(time(NULL)); 
 
@@ -87,7 +89,8 @@ int main(){
 	}
 	Jogador participantes[numero_jogadores];
 	
-	int ordem[numero_jogadores];
+	int ordem[numero_jogadores], ordem_categoria[5];
+	ordem_rodada(ordem_categoria, 5);
 
 	//iniciar(participantes, numero_jogadores);
 	for(int i = 0; i < numero_jogadores; i++){
@@ -104,14 +107,14 @@ int main(){
 	}
 	printf("\n");
 
-	for(int i = 0; i < 3; i++){
+	for(int i = 0; i < 5; i++){
 		letra_rodada = rand()%(26);
 		printf("Letra da rodada: %c\n", letras[letra_rodada]);
-		//categoria = rand()%(5);
-		//printf("Categoria: %s\n", categorias[categoria]);
+		printf("Categoria: %s\n", categorias[ordem_categoria[i]]);
 		ordem_rodada(ordem, numero_jogadores);
 		printf("Ordem dos jogadores na rodada %d\n", (i + 1));
 		for(int k = 0; k < numero_jogadores; k++){
+			printf("Jogador %d: ", ordem[k]);
 			printf("%s\n", participantes[ordem[k]].nome);
 		}
 		printf("\n");
