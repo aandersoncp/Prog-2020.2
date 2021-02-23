@@ -36,6 +36,10 @@ void inserir_jogador(Jogador *participantes, char *nome, int i){
 	strcpy(participantes[i].nome, nome);
 }
 
+void inserir_jogada(Jogador *participantes, char *jogada, int i){
+	strcpy(participantes[i].jogada, jogada);
+}
+
 int buscar(Jogador *participantes, char *nome, int numero_jogadores){
 	for(int i = 0; i < numero_jogadores; i++){
 		if(strcmp(participantes[i].nome, nome) == 0){
@@ -68,14 +72,13 @@ void ordem_rodada(int *ordem, int n){
 		//printf("%d", num);
 		i++;
 	}
-	printf("\n");
+	//printf("\n");
 }
-
-void rodada()
 
 int main(){
 	int numero_jogadores;
 	char nome_participante[50];
+	char jogada_rodada[30];
 	char letras[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	char *categorias[] = {"COMIDA", "ANIMAIS", "PESSOAS", "CIDADES", "PROFISSÕES"};
 	int letra_rodada, categoria_rodada;
@@ -118,6 +121,11 @@ int main(){
 			printf("%s\n", participantes[ordem[k]].nome);
 		}
 		printf("\n");
+		for(int k = 0; k < numero_jogadores; k++){
+			printf("Jogador %d: %s, digite sua resposta:\n", ordem[k], participantes[ordem[k]].nome);
+			scanf("%s", jogada_rodada);
+			inserir_jogada(participantes, jogada_rodada, ordem[k]);
+		}
 	}
 	return 0;
 }
