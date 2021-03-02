@@ -2,7 +2,7 @@
 #include <math.h>
 
 using namespace std;
-#define DIM 100
+#define DIM 10
 
 /*void substituicaoSucessivas(int n, float A[][DIM], float b[], float x[]){
 	int soma;
@@ -141,7 +141,7 @@ using namespace std;
 
 int main(){ 
 	int n = 3;
-	double A[n][n], b[n];
+	double A[DIM][DIM], b[n];
 	double x[n];
 
 	A[0][0] = 1;
@@ -150,13 +150,13 @@ int main(){
 	//A[0][3] = 1;
 
 	A[1][0] = 3;
-	A[1][1] = 1;
-	A[1][2] = 0;
+	A[1][1] = -4;
+	A[1][2] = 1;
 	//A[1][3] = -4;
 
-	A[2][0] = 0;
-	A[2][1] = 3;
-	A[2][2] = 4;
+	A[2][0] = 1;
+	A[2][1] = 2;
+	A[2][2] = 7;
 	//A[2][3] = 5;
 
 	//A[3][0] = 1;
@@ -164,8 +164,8 @@ int main(){
 	//A[3][2] = ;
 	//A[3][3] = 2;
 
-	b[0] = 3;
-	b[1] = 4;
+	b[0] = 1;
+	b[1] = 2;
 	b[2] = 3;
 	//b[3] = 8;
 
@@ -206,6 +206,27 @@ int main(){
 		printf("x[%d] = %f\n", i, x[i]);
 	}*/
 
+	/////////////////////////////
+	float multi = 1;
+	for(int k = 0; k < n; k++){
+		for(int j = k + 1; j < n; j++){
+			A[k][j] = A[k][j]/A[k][k];
+		}
+		b[k] = b[k]/A[k][k];
+		multi *= A[k][k]; 
+		A[k][k] = 1;
+		for(int i = 0; i < n; i++){
+			if(i != k){
+				for(int j = k + 1; j < n; j++){
+					A[i][j] = A[i][j] - A[i][k]*A[k][j];
+				}
+				b[i] = b[i] - A[i][k]*b[k];
+				A[i][k] = 0;
+			}
+		}
+	}
+	//x = b; //x é um vetor saída
+	printf("multi = %f\n\n", multi);
 
 	//////// MOSTRAR ///////////
 	for(int linhas = 0; linhas < n; linhas++){
@@ -217,7 +238,7 @@ int main(){
 	printf("\n");
 	//////// MOSTRAR ///////////
 
-	float soma;
+	/*float soma;
 	x[n - 1] = b[n - 1]/A[n - 1][n - 1];
 	for(int i = (n - 2); i >= 0; i--){
 		soma = 0;
@@ -225,10 +246,10 @@ int main(){
 			soma = soma + A[i][j]*x[j];
 		}
 		x[i] = (b[i] - soma)/A[i][i];
-	}	
+	}	*/
 
 	for(int i = 0; i < n; i++){
-		printf("x[%d] = %f\n", i, x[i]);
+		printf("b[%d] = %f\n", i, b[i]);
 	}
 
 	return 0;
