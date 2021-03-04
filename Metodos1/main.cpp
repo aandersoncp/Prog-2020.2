@@ -139,6 +139,86 @@ using namespace std;
 
 */
 
+
+/*
+float I[DIM][DIM];
+	for(int i = 0; i < n; i++){
+		for(int j = 0; j < n; j++){
+			if(i == j){
+				I[i][j] = 1;
+			} else{
+				I[i][j] = 0;
+			}
+		}
+	}
+	printf("IDENTIDADE:\n");
+	for(int linhas = 0; linhas < n; linhas++){
+		for(int colunas = 0; colunas < n; colunas++){
+			printf("%.2f ", I[linhas][colunas]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+	printf("A:\n");
+	for(int linhas = 0; linhas < n; linhas++){
+		for(int colunas = 0; colunas < n; colunas++){
+			printf("%.2f ", A[linhas][colunas]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+	/////////////////////////////
+	for(int k = 0; k < n; k++){
+		for(int j = k + 1; j < n; j++){
+			A[k][j] = A[k][j]/A[k][k];
+		}
+		for(int j = 0; j < n; j++){
+			I[k][j] = I[k][j]/A[k][k];
+		}
+		A[k][k] = 1;
+		
+		float multi;
+		for(int i = 0; i < n; i++){
+			if(i != k){
+				for(int j = k + 1; j < n; j++){
+					multi = A[i][k];
+					A[i][j] = A[i][j] - A[i][k]*A[k][j];
+				}
+				for(int h = 0; h < n; h++){
+					if(k < n - 1){
+						I[i][h] = I[i][h] - multi*I[k][h];
+					} else {
+						I[i][h] = I[i][h] - A[i][k]*I[k][h];
+					}
+				}
+				A[i][k] = 0;
+			}
+		}
+	}
+
+	printf("IDENTIDADE:\n");
+	//////// MOSTRAR ///////////
+	for(int linhas = 0; linhas < n; linhas++){
+		for(int colunas = 0; colunas < n; colunas++){
+			printf("%.2f ", I[linhas][colunas]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+
+	printf("A:\n");
+	for(int linhas = 0; linhas < n; linhas++){
+		for(int colunas = 0; colunas < n; colunas++){
+			printf("%.2f ", A[linhas][colunas]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+*/
+
 int main(){ 
 	int n = 3;
 	double A[DIM][DIM], b[n];
