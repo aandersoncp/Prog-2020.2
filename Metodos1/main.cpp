@@ -139,8 +139,43 @@ using namespace std;
 
 */
 
+/*
+/////////////DETERMINANTE///////////////////////
+
+float det = 1;
+	for(int k = 0; k < n; k++){
+		for(int j = k + 1; j < n; j++){
+			A[k][j] = A[k][j]/A[k][k];
+		}
+		b[k] = b[k]/A[k][k];
+		det *= A[k][k]; 
+		A[k][k] = 1;
+		for(int i = 0; i < n; i++){
+			if(i != k){
+				for(int j = k + 1; j < n; j++){
+					A[i][j] = A[i][j] - A[i][k]*A[k][j];
+				}
+				b[i] = b[i] - A[i][k]*b[k];
+				A[i][k] = 0;
+			}
+		}
+	}
+	//x = b; //x é um vetor saída
+	printf("det(A) = %f\n\n", det);
+
+	//////// MOSTRAR ///////////
+	for(int linhas = 0; linhas < n; linhas++){
+		for(int colunas = 0; colunas < n; colunas++){
+			printf("%.2f ", A[linhas][colunas]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+*/
 
 /*
+///////////////// INVERSA COM GAUSS JORDAN ///////////////////////////////////
 float I[DIM][DIM];
 	for(int i = 0; i < n; i++){
 		for(int j = 0; j < n; j++){
@@ -217,7 +252,63 @@ float I[DIM][DIM];
 		printf("\n");
 	}
 	printf("\n");
+
 */
+
+/*
+///////////FATORAÇÃO LU NORMAL///////////////////
+
+float L[DIM][DIM], U[DIM][DIM];
+
+	for(int linha = 0; linha < n; linha++){
+		for(int coluna = 0; coluna < n; coluna++){
+			U[linha][coluna] = A[linha][coluna];
+		}
+	}
+
+	for(int linha = 0; linha < n; linha++){
+		for(int coluna = 0; coluna < n; coluna++){
+			if(linha > coluna){
+				L[linha][coluna] = A[linha][coluna]/A[coluna][coluna];
+			} else if(linha == coluna){
+				L[linha][coluna] = 1;
+			} else{
+				L[linha][coluna] = 0;
+			}
+		}
+	}
+
+	float m;
+	for(int k = 0; k < n; k++){
+		for(int i = k + 1; i < n; i++){
+			m = -U[i][k]/U[k][k];
+			U[i][k] = 0;
+			for(int j = k + 1; j < n; j++){
+				U[i][j] = U[i][j] + m*U[k][j];
+			}
+		b[i] = b[i] + m*b[k]; 
+		}
+	}
+
+
+	for(int linhas = 0; linhas < n; linhas++){
+		for(int colunas = 0; colunas < n; colunas++){
+			printf("%.2f ", L[linhas][colunas]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+
+	for(int linhas = 0; linhas < n; linhas++){
+		for(int colunas = 0; colunas < n; colunas++){
+			printf("%.2f ", U[linhas][colunas]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+*/
+
 
 int main(){ 
 	int n = 3;
@@ -225,112 +316,70 @@ int main(){
 	double x[n];
 
 	A[0][0] = 1;
-	A[0][1] = 2;
-	A[0][2] = 3;
-	//A[0][3] = 1;
+	A[0][1] = -3;
+	A[0][2] = 2;
 
-	A[1][0] = 3;
-	A[1][1] = -4;
-	A[1][2] = 1;
-	//A[1][3] = -4;
+	A[1][0] = -2;
+	A[1][1] = 8;
+	A[1][2] = -1;
 
-	A[2][0] = 1;
-	A[2][1] = 2;
-	A[2][2] = 7;
-	//A[2][3] = 5;
+	A[2][0] = 4;
+	A[2][1] = -6;
+	A[2][2] = 5;
 
-	//A[3][0] = 1;
-	//A[3][1] = 2;
-	//A[3][2] = ;
-	//A[3][3] = 2;
+	b[0] = 11;
+	b[1] = -15;
+	b[2] = 29;
 
-	b[0] = 1;
-	b[1] = 2;
-	b[2] = 3;
-	//b[3] = 8;
+	float L[DIM][DIM], U[DIM][DIM];
 
-	for(int linhas = 0; linhas < n; linhas++){
-		for(int colunas = 0; colunas < n; colunas++){
-			printf("%.2f ", A[linhas][colunas]);
+	for(int linha = 0; linha < n; linha++){
+		for(int coluna = 0; coluna < n; coluna++){
+			U[linha][coluna] = A[linha][coluna];
 		}
-		printf("\n");
 	}
-	printf("\n");
 
+	for(int linha = 0; linha < n; linha++){
+		for(int coluna = 0; coluna < n; coluna++){
+			if(linha > coluna){
+				L[linha][coluna] = A[linha][coluna]/A[coluna][coluna];
+			} else if(linha == coluna){
+				L[linha][coluna] = 1;
+			} else{
+				L[linha][coluna] = 0;
+			}
+		}
+	}
 
-	//eliminacaoGaussiana
-	/*float m;
-	for(int k = 0; k < n; k++){ //colunas
-		for(int i = k + 1; i < n; i++){ // linhas
-			m = -A[i][k]/A[k][k];
-			A[i][k] = 0;
+	float m;
+	for(int k = 0; k < n; k++){
+		for(int i = k + 1; i < n; i++){
+			m = -U[i][k]/U[k][k];
+			U[i][k] = 0;
 			for(int j = k + 1; j < n; j++){
-				A[i][j] = A[i][j] + m*A[k][j];
+				U[i][j] = U[i][j] + m*U[k][j];
 			}
 		b[i] = b[i] + m*b[k]; 
 		}
-	}*/
-
-	//substituicaoRetroativas
-	/*float soma;
-	x[n - 1] = b[n - 1]/A[n - 1][n - 1];
-	for(int i = (n - 2); i >= 0; i--){
-		soma = 0;
-		for(int j = i + 1; j < n; j++){
-			soma = soma + A[i][j]*x[j];
-		}
-		x[i] = (b[i] - soma)/A[i][i];
-	}	
-
-	for(int i = 0; i < n; i++){
-		printf("x[%d] = %f\n", i, x[i]);
-	}*/
-
-	/////////////////////////////
-	float multi = 1;
-	for(int k = 0; k < n; k++){
-		for(int j = k + 1; j < n; j++){
-			A[k][j] = A[k][j]/A[k][k];
-		}
-		b[k] = b[k]/A[k][k];
-		multi *= A[k][k]; 
-		A[k][k] = 1;
-		for(int i = 0; i < n; i++){
-			if(i != k){
-				for(int j = k + 1; j < n; j++){
-					A[i][j] = A[i][j] - A[i][k]*A[k][j];
-				}
-				b[i] = b[i] - A[i][k]*b[k];
-				A[i][k] = 0;
-			}
-		}
 	}
-	//x = b; //x é um vetor saída
-	printf("multi = %f\n\n", multi);
 
-	//////// MOSTRAR ///////////
+
 	for(int linhas = 0; linhas < n; linhas++){
 		for(int colunas = 0; colunas < n; colunas++){
-			printf("%.2f ", A[linhas][colunas]);
+			printf("%.2f ", L[linhas][colunas]);
 		}
 		printf("\n");
 	}
 	printf("\n");
-	//////// MOSTRAR ///////////
 
-	/*float soma;
-	x[n - 1] = b[n - 1]/A[n - 1][n - 1];
-	for(int i = (n - 2); i >= 0; i--){
-		soma = 0;
-		for(int j = i + 1; j < n; j++){
-			soma = soma + A[i][j]*x[j];
+
+	for(int linhas = 0; linhas < n; linhas++){
+		for(int colunas = 0; colunas < n; colunas++){
+			printf("%.2f ", U[linhas][colunas]);
 		}
-		x[i] = (b[i] - soma)/A[i][i];
-	}	*/
-
-	for(int i = 0; i < n; i++){
-		printf("b[%d] = %f\n", i, b[i]);
+		printf("\n");
 	}
+	printf("\n");
 
 	return 0;
 }
