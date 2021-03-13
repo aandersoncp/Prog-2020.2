@@ -8,15 +8,14 @@
 #include<pthread.h>
 #include "jogo.h"
 
-void validar_num_jogadores(int* numero_jogadores){
+void validar_num_jogadores(int* numero_jogadores){ // FUNÇÃO QUE VALIDA O NÚMERO DE JOGADORES, CASO A ENTRADA SEJA UMA LETRA HÁ PROBLEMA
 	while(*numero_jogadores < 1 || *numero_jogadores > 10){
 		printf("Digite o número de jogadores (NO MÍNIMO 2 E NO MÁXIMO 10): \n");
 		scanf("%d", numero_jogadores);
 	}
-
 }
 
-int validar_nome(char *nome){
+int validar_nome(char *nome){ // FUNÇÃO QUE VALIDA OS NOMES DOS JOGADORES
 	while(strlen(nome) > 12){
 		printf("(ATENÇÃO) Digite o nome do jogador número com até 12 caracteres: \n");
 		scanf("%s", nome);
@@ -24,7 +23,7 @@ int validar_nome(char *nome){
 	return 1;
 }
 
-int validar_jogada(char *jogada, char letra){
+int validar_jogada(char *jogada, char letra){ // FUNÇÃO QUE VALIDA AS JOGADAS, VERIFICA SE A JOGADA TEM MAIS DE 30 POSIÇÕES OU SE COMEÇA COM A LETRA CERTA
 	while(strlen(jogada) > 30){
 		printf("(ATENÇÃO) Digite uma jogada com até 30 caracteres: \n");
 		scanf("%s", jogada);
@@ -33,28 +32,18 @@ int validar_jogada(char *jogada, char letra){
 		printf("(ATENÇÃO) Digite uma jogada que comece com a letra %c: \n", letra);
 		scanf("%s", jogada);
 	}
-	printf("\n-------JOGADA OK!-------\n");
 	return 1;
 }
 
-void inserir_jogador(Jogador *participantes, char *nome, int i){
+void inserir_jogador(Jogador *participantes, char *nome, int i){ // FUNÇÃO QUE COLOCA O NOME NO STRUCT JOGADOR
 	strcpy(participantes[i].nome, nome);
 }
 
-void inserir_jogada(Jogador *participante, char *jogada, int i){
+void inserir_jogada(Jogador *participante, char *jogada, int i){ // FUNÇÃO QUE COLOCA A JOGADA NO STRUCT JOGADOR
 	strcpy(participante[i].jogada, jogada);
 }
 
-int buscar(Jogador *participantes, char *nome, int numero_jogadores){
-	for(int i = 0; i < numero_jogadores; i++){
-		if(strcmp(participantes[i].nome, nome) == 0){
-			return i;
-		}
-	}
-	return 0;
-}
-
-int achou(int *ordem, int n, int num){
+int achou(int *ordem, int n, int num){ // FUNÇÃO QUE DETECTA SE ENCONTROU UM VALOR NO VETOR ORDEM
 	for(int i = 0; i < n; i++){
 		if(ordem[i] == num){
 			return 1;
@@ -63,7 +52,7 @@ int achou(int *ordem, int n, int num){
 	return 0;
 }
 
-void ordem_rodada(int *ordem, int n){
+void ordem_rodada(int *ordem, int n){ // FUNÇÃO QUE ORDENA A ORDEM DOS JOGADORES EM CADA RODADA
 	int num, i = 0;
 	for(int j = 0; j < n; j++){
 		ordem[j] = -1;
@@ -74,13 +63,11 @@ void ordem_rodada(int *ordem, int n){
 			num = rand()%(n);
 		}
 		ordem[i] = num;
-		//printf("%d", num);
 		i++;
 	}
-	//printf("\n");
 }
 
-int comparacao(char *nome, char *aux){
+int comparacao(char *nome, char *aux){ // FUNÇÃO VERIFICA SE AS STRINGS SÃO IGUAIS
 	if(strlen(nome) == strlen(aux)){
 		for(int i = 0; i < strlen(nome); i++){
 			if( tolower(nome[i]) != tolower(aux[i])){
@@ -92,12 +79,12 @@ int comparacao(char *nome, char *aux){
 	return 0;
 }
 
-void pontuacao(Jogador exemplo[], int n, double pontos[]){
+void pontuacao(Jogador exemplo[], int n, double pontos[]){ // FUNÇÃO QUE CALCULA A PONTUAÇÃO DOS JOGADORES EM CADA RODADA
 	int iguais[n][n + 1];
 	int igual, pontof, pontoc, pont = 0;
 	double ponto;	
 
-	for(int i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){ // MATRIZ QUE AJUDA NA COMPARAÇÃO DAS JOGADAS, INICIALIZA COM UMA MATRIZ IDENTIDADE
 		for(int j = 0; j < n; j++){
 			if(i == j){
 				iguais[i][j] = 1;
@@ -107,7 +94,7 @@ void pontuacao(Jogador exemplo[], int n, double pontos[]){
 		}
 	}
 
-	for(int i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){ // PARTE QUE FAZ A COMPARAÇÃO ENTRE AS JOGADAS, CASO A JOGADA DO JOGADOR I É IGUAL AO DO JOGADOR J ENTÃO A POSIÇÃO JJ RECEBE 0 E A POSIÇÃO IJ RECEBE 1, OU SEJA, NO FINAL SE NA LINHA I HÁ MAIS DE UM ELEMENTO IJ COM 1 ENTAÕ AS JOGADAS J SERÃO IGUAIS A I
 		if(iguais[i][i] == 1){
 			igual = 1;
 			for(int j = i + 1; j < n; j++){
@@ -121,7 +108,7 @@ void pontuacao(Jogador exemplo[], int n, double pontos[]){
 		}
 	}
 
-	for(int i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){ // PARTE QUE ATRIBUI OS PONTOS AO JOGADOR
 		ponto = strlen(exemplo[i].jogada)/(double)iguais[i][n];
 		pontof = floor(strlen(exemplo[i].jogada)/(double)iguais[i][n]);
 		if((ponto - pontof) < 0.5){
@@ -138,24 +125,27 @@ void pontuacao(Jogador exemplo[], int n, double pontos[]){
 			}
 		}
 	}
-	printf("\nRespostas:\n");
+
+	printf("\n##### Respostas: #####\n");
 	for(int i = 0; i < n; i++){
 		printf("Jogador (%d) %s: %s\n", (i + 1), exemplo[i].nome, exemplo[i].jogada);
 	}
-	printf("\n");
 
-	printf("Pontuação\n");
+	printf("\n##### Pontuação: #####\n");
 	for(int i = 0; i < n; i++){
-		printf("Jogador (%d) %s: %lf\n", (i + 1), exemplo[i].nome, pontos[i]);
+		printf("Jogador (%d) %s: %.1lf\n", (i + 1), exemplo[i].nome, pontos[i]);
+	}
+
+	printf("\n##### Tempo: #####\n");
+	for(int i = 0; i < n; i++){
+		printf("Jogador (%d) %s: %d segundos\n", (i + 1), exemplo[i].nome, exemplo[i].tempo_jogador);
 	}
 }
 
-void * routine(void *arg){
+void * routine(void *arg){ // FUNÇÃO DA THREAD QUE CONTA O TEMPO, SE O TEMPO ACABAR HÁ O CANCELAMENTO DA OUTRA THREAD(QUE ESPERA A JOGADA)
 	int r;
 	int *contador = (int *)(arg);
-	*contador = ((*contador)*2) + 8;
 	while((*contador)--){
-		//printf("%d\n", *contador);
 		arg = (void *)(contador);
 		sleep(1);
 	}
@@ -163,13 +153,12 @@ void * routine(void *arg){
 	pthread_exit(arg);
 }
 
-void * routine2(void *arg){	
+void * routine2(void *arg){	// FUNÇÃO DA THREAD QUE ESPERA A JOGADA
 	scanf("%s", (char *)(arg));
-	//aux_jogada = (char *)(arg);
 	pthread_exit(arg);
 }
 
-void jogadores_nomes(Jogador *participantes, int numero_jogadores){
+void jogadores_nomes(Jogador *participantes, int numero_jogadores){ // FUNÇÃO QUE RECEBE OS NOMES DOS JOGADORES
 	char nome_participante[50];
 	for(int i = 0; i < numero_jogadores; i++){
 		printf("Digite o nome do jogador número %d: \n", (i + 1));
@@ -184,35 +173,14 @@ void jogadores_nomes(Jogador *participantes, int numero_jogadores){
 	printf("\n");
 }
 
-void inic_pontos(double *pontos, int numero_jogadores){
+void inic_pontos(double *pontos, int numero_jogadores){ // FUNÇÃO QUE INICIALIZA COM O VETOR DE PONTOS COM ZEROS
 	for(int i = 0; i < numero_jogadores; i++){
 		pontos[i] = 0;
 	}
 }
 
-/*
-void entrada(Jogador jogador, char letra, int n){
-	void * thread_resA;
-	void * thread_resB;
-	int rstatus, r, a = n, fim = 1;
-	char jogada[30];
-	
-	rstatus = pthread_create (&thread_idA, NULL, routine, (void*)(&a));
-	rstatus = pthread_create (&thread_idB, NULL, routine2, (void*)(jogada));
 
-	while(fim){
-		if(pthread_join(thread_idB, &thread_resB) == 0){
-			r = pthread_cancel(thread_idA);
-			fim = 0;
-		}
-	}
-	//printf("Jogada: %s\n", jogada);
-	validar_jogada(jogada, letra);
-	inserir_jogada(jogador, jogada, a);
-	printf("Jogada do jogador %s: %s\n", jogador.nome ,jogador.jogada);
-}*/
-
-void rodadas(int numero_jogadores, Jogador *participantes){
+void rodadas(int numero_jogadores, Jogador *participantes){ // FUNÇÃO QUE ADMINISTRA AS RODADAS
 	int letra_rodada, categoria_rodada;
 	int ordem[numero_jogadores], ordem_categoria[5];
 	double pontos[numero_jogadores];
@@ -221,47 +189,81 @@ void rodadas(int numero_jogadores, Jogador *participantes){
 	char *categorias[] = {"COMIDA", "ANIMAIS", "PESSOAS", "CIDADES", "PROFISSÕES"};
 	void * thread_resA;
 	void * thread_resB;
-	int rstatus, r, a = numero_jogadores, fim;
+	int rstatus, r, num, x = numero_jogadores, fim, vencedor = 0, vencedores[numero_jogadores];
 	char jogada[30];
-
+	
 	ordem_rodada(ordem_categoria, 5);
 
 	inic_pontos(pontos, numero_jogadores);
 
+	for(int k = 0; k < numero_jogadores; k++){
+		participantes[k].tempo_jogador = 0;
+		vencedores[k] = 0;
+	}
+
 	for(int i = 0; i < 5; i++){
+		x = numero_jogadores;
+		num = x;
 		letra_rodada = rand()%(23);
-		printf("Categoria: %s com %c\n", categorias[ordem_categoria[i]], letras[letra_rodada]);
+		printf("----- Categoria: %s com %c -----\n", categorias[ordem_categoria[i]], letras[letra_rodada]);
 		ordem_rodada(ordem, numero_jogadores);
-		printf("Ordem dos jogadores na rodada %d\n", (i + 1));
+		printf("----- Ordem dos jogadores na rodada %d -----\n", (i + 1));
 		for(int k = 0; k < numero_jogadores; k++){
-			printf("Jogador %d: ", ordem[k]);
+			printf("Jogador %d: ", (ordem[k] + 1));
 			printf("%s\n", participantes[ordem[k]].nome);
 		}
 		printf("\n");
 		for(int k = 0; k < numero_jogadores; k++){
 			fim = 1;
-			printf("Categoria: %s com %c\n", categorias[ordem_categoria[i]], letras[letra_rodada]); //
-			printf("Jogador %d: %s, digite sua resposta:\n", (ordem[k] + 1), participantes[ordem[k]].nome);
-	
-			rstatus = pthread_create (&thread_idA, NULL, routine, (void*)(&a));
-			rstatus = pthread_create (&thread_idB, NULL, routine2, (void*)(jogada));
+			printf("\n----- Categoria: %s com %c -----\n", categorias[ordem_categoria[i]], letras[letra_rodada]); //
+			num = (x*2 + 8);
+			printf("Jogador %d: %s, digite sua resposta, você tem %d segundos para responder:\n", (ordem[k] + 1), participantes[ordem[k]].nome, (x*2 + 8));
 
+			rstatus = pthread_create (&thread_idA, NULL, routine, (void*)(&(num)));  // CRIAÇÃO DA THREAD QUE CONTA O TEMPO
+			rstatus = pthread_create (&thread_idB, NULL, routine2, (void*)(jogada)); // CRIAÇÃO DA THREAD QUE ESPERA A JOGADA
+			
 			while(fim){
-				if(pthread_join(thread_idB, &thread_resB) == 0){
+				if(pthread_join(thread_idB, &thread_resB) == 0){ // SE UMA JOGADA É DIGITADA ENTÃO A THREAD QUE ESPERA A JOGADA É TERMINADA E A QUE CONTA O TEMPO É CANCELADA
 					r = pthread_cancel(thread_idA);
 					fim = 0;
 				}
-			}	
-			//printf("Jogada: %s\n", jogada);
-			validar_jogada(jogada, letras[letra_rodada]);
-			inserir_jogada(participantes, jogada, ordem[k]);
-			printf("Jogada do jogador %s: %s\n", participantes[ordem[k]].nome ,participantes[ordem[k]].jogada);
+			}
+			if(num == -1){
+				inserir_jogada(participantes, "", ordem[k]);
+			} else {
+				participantes[ordem[k]].tempo_jogador += (x*2 + 8 - num);
+				validar_jogada(jogada, letras[letra_rodada]);
+				inserir_jogada(participantes, jogada, ordem[k]);
+			}
+			num = x--;
 		}
-			//scanf("%s", jogada_rodada);
-			//validar_jogada(jogada_rodada, letras[letra_rodada]);
-			//inserir_jogada(participantes[ordem[k]], jogada_rodada);
-			//system("clear"); //
+		system("clear"); 
 		pontuacao(participantes, numero_jogadores, pontos);
+		for(int i = 0; i < numero_jogadores; i++){ // PARTE QUE VERIFICA QUEM É O VENCEDOR
+			if(participantes[i].pontos > participantes[vencedor].pontos){
+				vencedor = i;
+				for(int k = 0; k < numero_jogadores; k++){
+					vencedores[k] = 0;
+				}
+				vencedores[i] = 1;		
+			} else if(participantes[i].pontos == participantes[vencedor].pontos){
+				if(participantes[i].tempo_jogador < participantes[vencedor].tempo_jogador){
+					vencedor = i;
+					for(int k = 0; k < numero_jogadores; k++){
+						vencedores[k] = 0;
+					}
+				} else if(participantes[i].tempo_jogador == participantes[vencedor].tempo_jogador){
+					vencedores[i] = 1;
+					vencedores[vencedor] = 1;
+				}
+			}
+		}
+		printf("\n");
+		for(int k = 0; k < numero_jogadores; k++){
+			if(vencedores[k] == 1){
+				printf("Vencedor: %s\n", participantes[k].nome);
+			}
+		}
 		printf("\n");
 	}
 }

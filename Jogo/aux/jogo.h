@@ -2,15 +2,11 @@ typedef struct{
 	char nome[13];
 	int pontos;
 	char jogada[30];
-	double tempo_jogador;
+	int tempo_jogador;
 } Jogador;
 
 pthread_t thread_idA;
 pthread_t thread_idB;
-
-char aux_jogada[30];
-
-//int str_tamanho(char *s);
 
 void validar_num_jogadores(int* numero_jogadores);
 
@@ -22,7 +18,7 @@ void inserir_jogador(Jogador *participantes, char *nome, int i);
 
 void inserir_jogada(Jogador *participante, char *jogada, int i);
 
-int buscar(Jogador *participantes, char *nome, int numero_jogadores);
+//int buscar(Jogador *participantes, char *nome, int numero_jogadores);
 
 int achou(int *ordem, int n, int num);
 

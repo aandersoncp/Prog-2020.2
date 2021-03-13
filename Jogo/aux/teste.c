@@ -11,19 +11,13 @@
 int main(){
 	int numero_jogadores;
 	srand(time(NULL)); 
-	//char jogada_rodada[30];
-	//int letra_rodada, categoria_rodada;
 
 	printf("Digite o número de jogadores (no mínimo 2 e no máximo 10): \n");
 	scanf("%d", &numero_jogadores);
-	validar_num_jogadores(&numero_jogadores); //VALIDAR QUANDO A ENTRADA FOR UMA LETRA
+	validar_num_jogadores(&numero_jogadores);
+
 	Jogador participantes[numero_jogadores];
 	double pontos[numero_jogadores];
-	
-	//int ordem[numero_jogadores], ordem_categoria[5];
-	//double pontos[numero_jogadores];
-
-	//ordem_rodada(ordem_categoria, 5);
 
 	inic_pontos(pontos, numero_jogadores);
 
