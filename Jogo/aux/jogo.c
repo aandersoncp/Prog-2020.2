@@ -9,7 +9,7 @@
 #include "jogo.h"
 
 void validar_num_jogadores(int* numero_jogadores){ // FUNÇÃO QUE VALIDA O NÚMERO DE JOGADORES, CASO A ENTRADA SEJA UMA LETRA HÁ PROBLEMA
-	while(*numero_jogadores < 1 || *numero_jogadores > 10){
+	while(*numero_jogadores <= 1 || *numero_jogadores > 10){
 		printf("Digite o número de jogadores (NO MÍNIMO 2 E NO MÁXIMO 10): \n");
 		scanf("%d", numero_jogadores);
 	}
@@ -130,7 +130,7 @@ void pontuacao(Jogador exemplo[], int n, double pontos[], int k, char *categoria
 
 	printf("\n##### Jogadas realizadas: #####\n");
 	for(int i = 0; i < n; i++){
-		printf("Jogador (%d) %s: %s\n", (i + 1), exemplo[i].nome, exemplo[i].jogada);
+		printf("Jogador %s: %s\n", exemplo[i].nome, exemplo[i].jogada);
 	}
 
 	for(int i = 0; i < n; i++){
@@ -170,7 +170,12 @@ void * routine(void *arg){ // FUNÇÃO DA THREAD QUE CONTA O TEMPO, SE O TEMPO A
 }
 
 void * routine2(void *arg){	// FUNÇÃO DA THREAD QUE ESPERA A JOGADA
-	scanf("%s", (char *)(arg));
+	int r = 0;
+	while(r == 0){
+		scanf("%s", (char *)(arg));
+		r = validar_jogada((char *)(arg), l);
+		printf("--\n");
+	}
 	pthread_exit(arg);
 }
 
@@ -185,7 +190,6 @@ void jogadores_nomes(Jogador *participantes, int numero_jogadores){ // FUNÇÃO 
 	for(int i = 0; i < numero_jogadores; i++){
 		printf("Jogador(%d): %s\n", (i + 1), participantes[i].nome);
 	}
-	printf("\n");
 	printf("\n");
 }
 
@@ -227,6 +231,7 @@ void rodadas(int numero_jogadores, Jogador *participantes){ // FUNÇÃO QUE ADMI
 			printf("Jogador %d: ", (ordem[k] + 1));
 			printf("%s\n", participantes[ordem[k]].nome);
 		}
+		l = letras[letra_rodada];
 		printf("\n");
 		for(int k = 0; k < numero_jogadores; k++){
 			fim = 1;
@@ -264,12 +269,11 @@ void rodadas(int numero_jogadores, Jogador *participantes){ // FUNÇÃO QUE ADMI
 	}
 
 	for(int i = 0; i < numero_jogadores; i++){ 
-		if(participantes[i].pontos == participantes[vencedor].pontos && i != vencedor){
-			if(participantes[i].tempo_jogador < participantes[vencedor].tempo_jogador){
+		if(participantes[i].pontos == participantes[vencedor].pontos){
+			if(participantes[i].tempo_jogador < participantes[vencedor_aux].tempo_jogador){
 				vencedor_aux = i;	
 			} 
 		}
-		//printf("TEMPO %d: %lf\n", i, participantes[i].tempo_jogador);
 	}
 
 	for(int i = 0; i < numero_jogadores; i++){ 
