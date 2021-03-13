@@ -236,8 +236,8 @@ void rodadas(int numero_jogadores, Jogador *participantes){ // FUNÇÃO QUE ADMI
 				inserir_jogada(participantes, jogada, ordem[k]);
 			}
 			num = x--;
-		}
-		system("clear"); 
+			system("clear");
+		} 
 		pontuacao(participantes, numero_jogadores, pontos);
 		for(int i = 0; i < numero_jogadores; i++){ // PARTE QUE VERIFICA QUEM É O VENCEDOR
 			if(participantes[i].pontos > participantes[vencedor].pontos){

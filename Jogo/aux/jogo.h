@@ -39,3 +39,4 @@ void inic_pontos(double *pontos, int numero_jogadores);
 void entrada(Jogador jogador, char letra, int n);
 
 void rodadas(int numero_jogadores, Jogador *participantes);
+
