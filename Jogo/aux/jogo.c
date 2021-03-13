@@ -172,9 +172,9 @@ void * routine(void *arg){ // FUNÇÃO DA THREAD QUE CONTA O TEMPO, SE O TEMPO A
 void * routine2(void *arg){	// FUNÇÃO DA THREAD QUE ESPERA A JOGADA
 	int r = 0;
 	while(r == 0){
-		scanf("%s", (char *)(arg));
+		scanf("%s%*[^\n]", (char *)(arg));
+		//setbuf(stdin, NULL);
 		r = validar_jogada((char *)(arg), l);
-		printf("--\n");
 	}
 	pthread_exit(arg);
 }
@@ -234,6 +234,7 @@ void rodadas(int numero_jogadores, Jogador *participantes){ // FUNÇÃO QUE ADMI
 		l = letras[letra_rodada];
 		printf("\n");
 		for(int k = 0; k < numero_jogadores; k++){
+			//setbuf(stdin, NULL);
 			fim = 1;
 			num = (x*2 + 8);
 			printf("%s, você deve entrar um NOME DE %s com a letra %c em %d segundos:\n", participantes[ordem[k]].nome, categorias[ordem_categoria[i]], letras[letra_rodada], (x*2 + 8));
