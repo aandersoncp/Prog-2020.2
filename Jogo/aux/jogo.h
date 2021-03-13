@@ -2,7 +2,8 @@ typedef struct{
 	char nome[13];
 	int pontos;
 	char jogada[30];
-	int tempo_jogador;
+	double tempo_jogador;
+	int pontuac[5];
 } Jogador;
 
 pthread_t thread_idA;
@@ -26,7 +27,7 @@ void ordem_rodada(int *ordem, int n);
 
 int comparacao(char *nome, char *aux);
 
-void pontuacao(Jogador exemplo[], int n, double pontos[]);
+void pontuacao(Jogador exemplo[], int n, double pontos[], int k, char *categorias[], int *ordem_categoria);
 
 void * routine(void *arg);
 
