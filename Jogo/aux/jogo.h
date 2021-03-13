@@ -20,7 +20,7 @@ int validar_jogada(char *jogada, char letra);
 
 void inserir_jogador(Jogador *participantes, char *nome, int i);
 
-void inserir_jogada(Jogador participante, char *jogada);
+void inserir_jogada(Jogador *participante, char *jogada, int i);
 
 int buscar(Jogador *participantes, char *nome, int numero_jogadores);
 
