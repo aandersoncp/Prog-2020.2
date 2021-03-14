@@ -173,24 +173,25 @@ void * routine2(void *arg){	// FUNÇÃO DA THREAD QUE ESPERA A JOGADA
 	int r = 0;
 	while(r == 0){
 		scanf("%s%*[^\n]", (char *)(arg));
-		//setbuf(stdin, NULL);
 		r = validar_jogada((char *)(arg), l);
 	}
 	pthread_exit(arg);
 }
 
 void jogadores_nomes(Jogador *participantes, int numero_jogadores){ // FUNÇÃO QUE RECEBE OS NOMES DOS JOGADORES
-	char nome_participante[50];
+	char nome_participante[50], ch;
 	for(int i = 0; i < numero_jogadores; i++){
 		printf("Digite o nome do jogador número %d: ", (i + 1));
 		scanf("%s", nome_participante);
 		validar_nome(nome_participante);
 		inserir_jogador(participantes, nome_participante, i);
 	}
+	printf("JOGADORES: \n");
 	for(int i = 0; i < numero_jogadores; i++){
 		printf("Jogador(%d): %s\n", (i + 1), participantes[i].nome);
 	}
-	printf("\n");
+
+	printf("\n\n");
 }
 
 void inic_pontos(double *pontos, int numero_jogadores){ // FUNÇÃO QUE INICIALIZA COM O VETOR DE PONTOS COM ZEROS
@@ -228,13 +229,12 @@ void rodadas(int numero_jogadores, Jogador *participantes){ // FUNÇÃO QUE ADMI
 		ordem_rodada(ordem, numero_jogadores);
 		printf("----- Ordem dos jogadores na rodada %d -----\n", (i + 1));
 		for(int k = 0; k < numero_jogadores; k++){
-			printf("Jogador %d: ", (ordem[k] + 1));
+			printf("%d. ", (k + 1));
 			printf("%s\n", participantes[ordem[k]].nome);
 		}
 		l = letras[letra_rodada];
 		printf("\n");
 		for(int k = 0; k < numero_jogadores; k++){
-			//setbuf(stdin, NULL);
 			fim = 1;
 			num = (x*2 + 8);
 			printf("%s, você deve entrar um NOME DE %s com a letra %c em %d segundos:\n", participantes[ordem[k]].nome, categorias[ordem_categoria[i]], letras[letra_rodada], (x*2 + 8));
