@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #define MAXNOME 100
 
@@ -54,7 +55,7 @@ void percorrer(Lista **ll){
 			printf("E-MAIL: %s\n", aux->email);
 			printf("TELEFONE: (%d) %d ", aux->ddd, aux->tel);
 			if(aux->tipo == 'f' || aux->tipo == 'F'){
-				printf("(fixo)\n");
+				printf("(fixo)\n\n");
 			} else{
 				printf("(celular)\n\n");
 			}
@@ -87,7 +88,7 @@ int agd_inserir_inicio(Lista **ll, int matr, char *nome, int ddd, int tel, char*
 
 	*ll = novo;
 	
-	percorrer(ll);
+	//percorrer(ll);
 
 	return 1;
 }
@@ -121,7 +122,7 @@ int agd_inserir_final(Lista **ll, int matr, char *nome, int ddd, int tel, char* 
 		novo->ant = aux;
 	}
 	
-	percorrer(ll);
+	//percorrer(ll);
 	return 1;
 }
 
@@ -135,12 +136,13 @@ void carregar(Lista **ll, char *nomearq){
 		return;
 	}
 	while(fscanf(arq, "%d\n%s\n%d\n%d\n%s\n%c", &matr, nome, &ddd, &tel, email, &tipo) != EOF){
-		lst_inserir(ll, matr, nome, ddd, tel, email, tipo);
+		agd_inserir_final(ll, matr, nome, ddd, tel, email, tipo);
 	}
 
 	fclose(arq);
 	printf("Carregamento feito com sucesso!\n");
 }
+
 
 void remover(Lista **ll, char* nome){
 	Lista *aux = *ll;
@@ -189,9 +191,53 @@ void salvar(Lista **ll, char *nomearq){
 	return;
 }
 
-void agd_ordenar(Lista **ll){
-	Lista *aux;
+int comparar(char *nome1, char* nome2){
+	int tamanho = strlen(nome1);
+	if(strlen(nome2) < tamanho){
+		tamanho = strlen(nome2);
+	}
+	for(int i = 0; i < tamanho; i++){
+		if( tolower(nome1[i]) > tolower(nome2[i])){
+			return 1;
+		} else if(tolower(nome1[i]) < tolower(nome2[i])){
+			return 0;
+		}
+	}
+	return 0;
+}
 
+void agd_ordenar(Lista **ll){
+	Lista *aux, *aux1, *aux2;
+	aux = *ll;
+	aux1 = aux;
+	aux2 = aux->prox;
+	printf("\n----LISTA ORDENADA----\n\n");
+	percorrer(ll);
+	while(aux2 != NULL){
+		aux1 = aux;
+		while(aux1 != aux2){
+			if(comparar(aux1->nome, aux2->nome)){
+				if((aux2->prox) != NULL){
+					(aux2->prox)->ant = aux2->ant;
+				}
+				(aux2->ant)->prox = aux2->prox;
+				(aux2->prox) = aux1;
+				(aux2->ant) = aux1->ant;
+				if(aux1->ant != NULL){
+					(aux1->ant)->prox = aux2;
+				} else{
+					*ll = aux2;
+				}
+				(aux1->ant) = aux2;
+				break;
+			}
+			aux1 = aux1->prox;
+		}
+		aux2 = aux2->prox;
+	}
+
+	printf("\n\n----LISTA ORDENADA----\n\n");
+	percorrer(ll);
 }
 
 
@@ -219,7 +265,7 @@ void menu(Lista **ll, char *nomearq){
 	system("clear");
 
 	while (sair != 1) {
-		printf("------ MENU ------\nESCOLHA UM DOS COMANDOS:\n\nInserir novo contato no início(opção ‘I’);\nInserir novo contato no fim(opção ‘F’);\nCarregar contatos de arquivo (opção ‘C’);\nRemover contato (opção 'R')\nListar nomes na agenda (opção ‘P’);\nSalvar os contatos em arquivo('S');\n*Para sair do Menu digite 'X'.\n\nEscolher opção: ");
+		printf("------ MENU ------\nESCOLHA UM DOS COMANDOS:\n\nInserir novo contato no início(opção ‘I’);\nInserir novo contato no fim(opção ‘F’);\nCarregar contatos de arquivo (opção ‘C’);\nRemover contato (opção 'R')\nListar nomes na agenda (opção ‘P’);\nOrdenar por ordem alfabética os nomes na agenda (opção ‘O’);\nSalvar os contatos em arquivo('S');\n*Para sair do Menu digite 'X'.\n\nEscolher opção: ");
 
 		scanf(" %c", &comando);
 
@@ -385,6 +431,12 @@ void menu(Lista **ll, char *nomearq){
 				break;
 			case 's': 
 				salvar(ll, "contatos_salvos.txt");
+				break;
+			case 'O':
+				agd_ordenar(ll);
+				break;
+			case 'o':
+				agd_ordenar(ll);
 				break;
 			case 'R':
 				printf("\n> REMOVER CONTATO:\nDigite o nome do contato para ser removido: ");
