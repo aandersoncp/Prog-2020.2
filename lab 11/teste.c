@@ -197,25 +197,36 @@ int comparar(char *nome1, char* nome2){
 		tamanho = strlen(nome2);
 	}
 	for(int i = 0; i < tamanho; i++){
-		if( tolower(nome1[i]) > tolower(nome2[i])){
+		if(tolower(nome1[i]) > tolower(nome2[i])){
 			return 1;
 		} else if(tolower(nome1[i]) < tolower(nome2[i])){
 			return 0;
 		}
 	}
-	return 0;
+	if(strlen(nome1) == tamanho){
+		return 0;
+	} else{
+		return 1;
+	}
 }
 
 void agd_ordenar(Lista **ll){
 	Lista *aux, *aux1, *aux2;
 	aux = *ll;
 	aux1 = aux;
-	aux2 = aux->prox;
-	printf("\n----LISTA ORDENADA----\n\n");
+	aux2 = aux;
+
+	if(aux1 == NULL){
+		printf("Lista vazia!\n");
+		return;
+	}
+
+	printf("\n----LISTA NÃO ORDENADA----\n\n");
 	percorrer(ll);
+
 	while(aux2 != NULL){
-		aux1 = aux;
-		while(aux1 != aux2){
+		aux1 = aux2;
+		while(aux1 != NULL){
 			if(comparar(aux1->nome, aux2->nome)){
 				if((aux2->prox) != NULL){
 					(aux2->prox)->ant = aux2->ant;
@@ -229,13 +240,11 @@ void agd_ordenar(Lista **ll){
 					*ll = aux2;
 				}
 				(aux1->ant) = aux2;
-				break;
 			}
-			aux1 = aux1->prox;
+			aux1 = aux1->ant;
 		}
 		aux2 = aux2->prox;
 	}
-
 	printf("\n\n----LISTA ORDENADA----\n\n");
 	percorrer(ll);
 }
