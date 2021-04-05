@@ -5,27 +5,22 @@
 #include "listaduplaencad.h"
 #include "config.h"
 
-/*
-int busca_binaria(int *vetor, int chave, int inicio, int fim){
-	int n = fim - inicio;
-	n = n/2;
 
-
-}*/
-
+#define N 600
+#define K 1605000
 
 
 int main(){
 	Lista *ll;
 	Arvore *raiz;
-	int *vetor;
+	int vetor[N];
 	long double time1 = 0, time2 = 0, time3 = 0, time4 = 0;
 	srand(time(NULL));
 	
 	iniciar_arvore(&raiz);
 	iniciar_lista(&ll);
 
-	comparador(&raiz, &ll, vetor);
+	comparador(&raiz, &ll, vetor, N, K);
 
 	return 0;
 }

@@ -15,10 +15,30 @@ int busca_sequencial(int *vetor, int n, int chave){
 	return 0;
 }
 
-void comparador(Arvore **a, Lista **ll, int *vetor){
+int bbr(int *vetor, int inicio, int fim, int x){
+	//printf("inicio = %d\n", inicio);
+	//printf("fim = %d\n", fim);
+	int meio = (inicio + fim)/2;
+	//printf("meio = %d\n\n", meio);
+	if(vetor[meio] == x){
+	//	printf("vetor[%d] = %d\n", meio, vetor[meio]);
+		return 1;
+	}
+	if(inicio >= fim){
+		return 0;
+	} else {
+		if(vetor[meio] < x){
+			bbr(vetor, meio + 1, fim, x);
+		} else {
+			bbr(vetor, inicio, meio - 1, x);
+		}
+	}
+}
+
+void comparador(Arvore **a, Lista **ll, int vetor[], int N, int K){
 	int chave, aux1, aux2, encontrar, n = 0, buscar;
 	float valor; 
-	long double time1 = 0, time2 = 0, time3 = 0, time4 = 0;
+	long double time1 = 0, time2 = 0, time3 = 0, time4 = 0, time5 = 0;
 	clock_t inicio, fim;
 	srand(time(NULL));
 
@@ -64,6 +84,11 @@ void comparador(Arvore **a, Lista **ll, int *vetor){
 		time3 = time3 + (fim - inicio);
 
 		inicio = clock();
+		bbr(vetor, 0, N, buscar);
+		fim = clock();
+		time5 = time5 + (fim - inicio);
+
+		inicio = clock();
 		liberar_arvore(a);
 		liberar_lista(ll);
 		fim = clock();
@@ -72,7 +97,8 @@ void comparador(Arvore **a, Lista **ll, int *vetor){
 
 	printf("Tempo de busca ABB: %Lf\n",time1/CLOCKS_PER_SEC);
 	printf("Tempo de busca LISTA: %Lf\n",time2/CLOCKS_PER_SEC);
-	printf("Tempo de busca sequencial VETOR: %Lf\n",time3/CLOCKS_PER_SEC);
+	printf("Tempo de busca sequencial no  VETOR: %Lf\n",time3/CLOCKS_PER_SEC);
+	printf("Tempo de busca binária no VETOR: %Lf\n",time5/CLOCKS_PER_SEC);
 	printf("Tempo restante: %Lf\n",time4/CLOCKS_PER_SEC);
 
 }
