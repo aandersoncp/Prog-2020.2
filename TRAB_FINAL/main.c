@@ -10,6 +10,7 @@
 #define K 1605000
 
 
+
 int main(){
 	Lista *ll;
 	Arvore *raiz;

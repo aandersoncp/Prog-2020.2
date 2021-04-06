@@ -35,20 +35,36 @@ int bbr(int *vetor, int inicio, int fim, int x){
 	}
 }
 
+int chave_unica(int chave, int *v, int j){
+	for(int i = 0; i <= j; i++){
+		if(v[i] == chave){
+			return 1;
+		}
+	}
+	return 0;
+}
+
 void comparador(Arvore **a, Lista **ll, int vetor[], int N, int K){
-	int chave, aux1, aux2, encontrar, n = 0, buscar;
+	int chave, aux1, aux2, encontrar, n = 0, buscar, v[N];
 	float valor; 
-	long double time1 = 0, time2 = 0, time3 = 0, time4 = 0, time5 = 0;
+	long double time1 = 0, time2 = 0, time3 = 0, time4 = 0;
 	clock_t inicio, fim;
 	srand(time(NULL));
+
+	for(int j = 0; j < N; j++){
+			v[j] = -1;
+		}
 
 	for(int i = 0; i < K; i++){
 		iniciar_arvore(a);
 		iniciar_lista(ll);
-		inicio = clock();
 		for(int j = 0; j < N; j++){
-			chave = rand()%(100*N);
-			//VERIFICAR SE A CHAVE É ÚNICA
+			chave = rand()%(/*100*N*/20);
+			while(j != 0 && chave_unica(chave, v, j)){
+				chave = rand()%(/*100*N*/20);
+			}
+			v[j] = chave;
+
 			aux1 = rand()%(100*N);
 			aux2 = rand()%(100*N);
 			while(aux2 == 0){
@@ -58,13 +74,12 @@ void comparador(Arvore **a, Lista **ll, int vetor[], int N, int K){
 			inserir_no_arvore(a, chave, valor);
 			lista_inserir(ll, chave, valor);
 		}
+
 		n = 0;
 		//printf("\n");
 		buscar = rand()%(100*N);
 		percurso_em_ordem(a, vetor, &n);
 		//printf("\n");
-		fim = clock();
-		time4 = time4 + (fim - inicio);
 
 		inicio = clock();
 		buscar_arvore(a, buscar);
@@ -86,19 +101,20 @@ void comparador(Arvore **a, Lista **ll, int vetor[], int N, int K){
 		inicio = clock();
 		bbr(vetor, 0, N, buscar);
 		fim = clock();
-		time5 = time5 + (fim - inicio);
+		time4 = time4 + (fim - inicio);
 
-		inicio = clock();
 		liberar_arvore(a);
 		liberar_lista(ll);
-		fim = clock();
-		time4 = time4 + (fim - inicio);
+
+		for(int j = 0; j < N; j++){
+			v[j] = -1;
+		}
 	}
+
 
 	printf("Tempo de busca ABB: %Lf\n",time1/CLOCKS_PER_SEC);
 	printf("Tempo de busca LISTA: %Lf\n",time2/CLOCKS_PER_SEC);
-	printf("Tempo de busca sequencial no  VETOR: %Lf\n",time3/CLOCKS_PER_SEC);
-	printf("Tempo de busca binária no VETOR: %Lf\n",time5/CLOCKS_PER_SEC);
-	printf("Tempo restante: %Lf\n",time4/CLOCKS_PER_SEC);
+	printf("Tempo de busca sequencial no VETOR: %Lf\n",time3/CLOCKS_PER_SEC);
+	printf("Tempo de busca binária no VETOR: %Lf\n",time4/CLOCKS_PER_SEC);
 
 }

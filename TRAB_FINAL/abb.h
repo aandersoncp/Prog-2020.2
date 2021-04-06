@@ -14,6 +14,4 @@ void percurso_em_ordem(Arvore **a, int *vetor, int *i);
 
 int buscar_arvore(Arvore **a, int chave);
 
-//void liberar_arvore(Arvore **a);
-
 Arvore* liberar_arvore(Arvore **a);
